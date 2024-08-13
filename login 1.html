@@ -1,0 +1,80 @@
+<!--
+@author [Alecia Sutherland]
+@email [example@mail.com]
+@create date 2024-08-03 12:30:36
+@modify date 2024-08-03 12:30:36
+@desc [Login page]
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page - TCSS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  
+</head>
+<body>
+    <div class="login-container">
+        <div class="card login-card">
+            <div class="card-body">
+                <div class="icon-container">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h5 class="card-title text-center">Login</h5>
+
+                <!-- Alert for error/success messages -->
+                <div id="login-alert" class="alert alert-danger d-none" role="alert">
+                    Invalid credentials. Please try again.
+                </div>
+                    <form action="/login" id="login-form" method="POST">
+                    <div class="form-group role-selector">
+                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                </form>
+                <p>{{ message }}</p>
+                <!-- Link to open Forgot Password modal -->
+                <div class="text-center mt-3">
+                    <a href="#" data-toggle="modal" data-target="#forgotPasswordModal">Forgot Password?</a>
+                </div>
+
+                <!-- Forgot Password Modal -->
+                <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="forgot-password-form">
+                                    <div class="form-group">
+                                        <label for="email">Enter your email address</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Email" required>
+                                    </div>
+                                    <input type="submit"
+                                           class="btn btn-primary"
+                                           value="Login">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
