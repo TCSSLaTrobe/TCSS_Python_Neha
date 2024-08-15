@@ -1,0 +1,193 @@
+<!--
+@author [Alecia Sutherland]
+@email [alecia@mail.com]
+@create date 2024-08-14 15:21:11
+@modify date 2024-08-14 15:21:11
+@desc [Admin page 1]
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Page - Add new Lecturer</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="mb-4">Add New Lecturer</h2>
+    <form id="lecturerForm">
+      <div class="form-group">
+        <label for="lecturerName">Lecturer Name</label>
+        <select class="form-control" id="lecturerName">
+          <option>Acacia</option>
+          <option>Beech</option>
+          <option>Cypress</option>
+          <option>Douglas</option>
+          <option>Flame</option>
+          <option>Guava</option>
+          <option>Hickory</option>
+          <option>Ironbark</option>
+          <option>Jacaranda</option>
+          <option>Karri</option>
+          <option>Laurel</option>
+            <option>Maple</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="subjectPrefix">Subject Prefix</label>
+        <select class="form-control" id="subjectPrefix">
+          <option>CSE1ITX-Information Technology Fundamentals</option>
+          <option>CSE1PGX-Programming Environments</option>
+          <option>CSE1CFX-Cloud Foundations</option>
+          <option>CSE1OFX-Object Oriented Programming Fundamentals</option>
+          <option>CSE1ISX-Information Systems</option>
+          <option>CSE2NFX-Network Engineering Fundamentals</option>
+          <option>CSE2DCX-Database Fundamentals on the Cloud</option>
+          <option>CSE1SPX-Sustainability Practices</option>
+          <option>CSE1SIX-Information System Infrastructure</option>
+          <option>CSE1IOX-Intermediate Object Oriented Programming</option>
+          <option>CSE2ICX-Internet Client Engineering</option>
+          <option>CSE2CNX-Computer Networks</option>
+          <option>CSE2SDX-Information Systems Development</option>
+          <option>BUS2PMX-Project Management</option>
+          <option>CSE2VVX-Virtualisation for the Cloud</option>
+          <option>MAT2DMX-Discrete Mathematics for Computer Science</option>
+          <option>CSE2MAX-Mobile Application Development</option>
+          <option>CSE2OSX-Operating Systems</option>
+          <option>CSE2ADX-Application Development in the Cloud</option>
+          <option>CSE2CPX-Managing Projects in the Cloud</option>
+          <option>CSE2MLX-Machine Learning</option>
+          <option>CSE2SAX-Operating Systems Administration</option>
+          <option>CSE2ANX-Advanced Computer Networks</option>
+          <option>CSE2WDX-Web Development</option>
+          <option>CSE3BGX-Big Data Management on the Cloud (Elective)</option>
+          <option>CSE3CIX-Computational Intelligence for Data Analysis (Elective)</option>
+          <option>CSE3CSX-Cybersecurity Fundamentals (Elective)</option>
+          <option>CSE3NWX-Networks, Systems and Web Security (Elective)</option>
+          <option>CSE3OTX-Internet of Things (Elective)</option>
+          <option>CSE3WSX-Wireless Network Engineering (Elective)</option>
+          <option>CSE3PAX-Industry Project 3A</option>
+          <option>CSE3PBX-Industry Project 3B</option>
+          <option>CSE3PEX-Profesional Environment</option>
+          <option>CSE3ACX-Architecting on the Cloud</option>
+          <option>CSE3SOX-System Operations on the Cloud</option>
+          <option>CSE3BDX-Big Data on the Cloud</option>
+          <option>CSE3PCX-Private Cloud Solutions</option>
+          <option>CSE3CAX-Industry Project for Cloud Technology 3A</option>
+          <option>CSE3CBX-Industry Project for Cloud Technology 3B</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="lecturerLoad">Lecturer Load</label>
+        <input type="number" class="form-control" id="lecturerLoad" placeholder="Enter lecturer load">
+      </div>
+      <button type="button" class="btn btn-primary" id="addButton">Add Lecturer</button>
+    </form>
+
+    <h3 class="mt-5">Lecturer List</h3>
+    <table class="table table-bordered mt-3" id="lecturerTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Subject Prefix</th>
+          <th>Load</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic rows will be added here -->
+      </tbody>
+      </table>
+    <button class="btn btn-secondary mt-3" id="exportButton">Export to CSV</button>
+  </div>
+    </table>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#addButton').click(function() {
+        const name = $('#lecturerName').val();
+        const prefix = $('#subjectPrefix').val();
+        const load = $('#lecturerLoad').val();
+
+        if (name && prefix && load) {
+          const newRow = `
+            <tr>
+              <td class="editable" data-type="text">${name}</td>
+              <td class="editable" data-type="text">${prefix}</td>
+              <td class="editable" data-type="number">${load}</td>
+              <td>
+                <button class="btn btn-success btn-sm editButton">Edit</button>
+                <button class="btn btn-danger btn-sm deleteButton">Delete</button>
+                <button class="btn btn-primary btn-sm saveButton" style="display:none;">Save</button>
+              </td>
+            </tr>
+          `;
+          $('#lecturerTable tbody').append(newRow);
+        }
+      });
+
+      $(document).on('click', '.editButton', function() {
+        const row = $(this).closest('tr');
+        row.find('.editable').each(function() {
+          const value = $(this).text();
+          $(this).html(`<input type="text" class="form-control" value="${value}">`);
+        });
+        row.find('.editButton').hide();
+        row.find('.saveButton').show();
+      });
+
+      $(document).on('click', '.saveButton', function() {
+        const row = $(this).closest('tr');
+        row.find('.editable').each(function() {
+          const value = $(this).find('input').val();
+          $(this).text(value);
+        });
+        row.find('.saveButton').hide();
+        row.find('.editButton').show();
+      });
+
+      $(document).on('click', '.deleteButton', function() {
+        $(this).closest('tr').remove();
+      });
+    });
+  </script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $(document).on('click', '.deleteButton', function() {
+        $(this).closest('tr').remove();
+      });
+
+      $('#exportButton').click(function() {
+        let csv = [];
+        const rows = document.querySelectorAll("table tr");
+
+        for (const row of rows) {
+          const cells = row.querySelectorAll("td, th");
+          const rowText = Array.from(cells).map(cell => cell.innerText);
+          csv.push(rowText.join(","));
+        }
+
+        const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+        const downloadLink = document.createElement("a");
+        downloadLink.href = URL.createObjectURL(csvFile);
+        downloadLink.download = "lecturers.csv";
+        downloadLink.click();
+      });
+    });
+  </script>
+</body>
+</html>
+
+</body>
+</html>
