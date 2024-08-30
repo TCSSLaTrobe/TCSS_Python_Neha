@@ -1,0 +1,303 @@
+<!--
+@author [Alecia Sutherland]
+@email [example@mail.com]
+@create date 2024-08-03 12:30:23
+@modify date 2024-08-03 12:30:23
+@desc [Admin page]
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Page - TCSS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .btn-custom {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">TCSS Admin</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#staff">Manage Staff</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#subjects">Manage Subjects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Alerts -->
+    <div id="alerts-container" class="container">
+        <!-- Alerts will be dynamically inserted here -->
+    </div>
+
+    <!-- Staff Section -->
+    <div id="staff" class="container">
+        <h2>Manage Staff Members</h2>
+        <button class="btn btn-primary btn-custom" data-toggle="modal" data-target="#staffModal">Add New Staff</button>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="staff-table-body">
+                <!-- Staff rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Subjects Section -->
+    <div id="subjects" class="container">
+        <h2>Manage Subjects</h2>
+        <button class="btn btn-primary btn-custom" data-toggle="modal" data-target="#subjectModal">Add New Subject</button>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Subject Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="subjects-table-body">
+                <!-- Subjects rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Staff Modal -->
+    <div class="modal fade" id="staffModal" tabindex="-1" role="dialog" aria-labelledby="staffModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staffModalLabel">Add/Edit Staff Member</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="staff-form">
+                        <div class="form-group">
+                            <label for="staff-name">Name</label>
+                            <input type="text" class="form-control" id="staff-name" placeholder="Enter name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="staff-position">Position</label>
+                            <input type="text" class="form-control" id="staff-position" placeholder="Enter position" required>
+                        </div>
+                        <input type="hidden" id="staff-id">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subject Modal -->
+    <div class="modal fade" id="subjectModal" tabindex="-1" role="dialog" aria-labelledby="subjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="subjectModalLabel">Add/Edit Subject</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="subject-form">
+                        <div class="form-group">
+                            <label for="subject-name">Subject Name</label>
+                            <input type="text" class="form-control" id="subject-name" placeholder="Enter subject name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject-description">Description</label>
+                            <textarea class="form-control" id="subject-description" rows="3" placeholder="Enter description" required></textarea>
+                        </div>
+                        <input type="hidden" id="subject-id">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Dummy data
+        const staffData = [
+            { id: 1, name: 'John Doe', position: 'Math Teacher' },
+            { id: 2, name: 'Jane Smith', position: 'English Teacher' }
+        ];
+
+        const subjectsData = [
+            { id: 1, name: 'Mathematics', description: 'Advanced math course' },
+            { id: 2, name: 'Literature', description: 'Classical and modern literature' }
+        ];
+
+        // Load tables with data
+        function loadTableData() {
+            const staffTableBody = document.getElementById('staff-table-body');
+            const subjectsTableBody = document.getElementById('subjects-table-body');
+
+            staffTableBody.innerHTML = '';
+            staffData.forEach(staff => {
+                staffTableBody.innerHTML += `
+                    <tr>
+                        <td>${staff.name}</td>
+                        <td>${staff.position}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="editStaff(${staff.id})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteStaff(${staff.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            subjectsTableBody.innerHTML = '';
+            subjectsData.forEach(subject => {
+                subjectsTableBody.innerHTML += `
+                    <tr>
+                        <td>${subject.name}</td>
+                        <td>${subject.description}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="editSubject(${subject.id})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteSubject(${subject.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Function to delete staff
+        function deleteStaff(id) {
+            const index = staffData.findIndex(staff => staff.id === id);
+            if (index !== -1) {
+                staffData.splice(index, 1);
+                showAlert('Staff member deleted successfully!', 'success');
+                loadTableData();
+            }
+        }
+
+        // Function to delete subject
+        function deleteSubject(id) {
+            const index = subjectsData.findIndex(subject => subject.id === id);
+            if (index !== -1) {
+                subjectsData.splice(index, 1);
+                showAlert('Subject deleted successfully!', 'success');
+                loadTableData();
+            }
+        }
+
+        // Function to handle edit staff
+        function editStaff(id) {
+            const staff = staffData.find(staff => staff.id === id);
+            if (staff) {
+                document.getElementById('staff-name').value = staff.name;
+                document.getElementById('staff-position').value = staff.position;
+                document.getElementById('staff-id').value = staff.id;
+                $('#staffModal').modal('show');
+            }
+        }
+
+        // Function to handle edit subject
+        function editSubject(id) {
+            const subject = subjectsData.find(subject => subject.id === id);
+            if (subject) {
+                document.getElementById('subject-name').value = subject.name;
+                document.getElementById('subject-description').value = subject.description;
+                document.getElementById('subject-id').value = subject.id;
+                $('#subjectModal').modal('show');
+            }
+        }
+
+        // Handle form submissions for staff
+        document.getElementById('staff-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('staff-name').value;
+            const position = document.getElementById('staff-position').value;
+            const id = document.getElementById('staff-id').value;
+
+            if (id) {
+                // Edit existing staff member
+                const staff = staffData.find(staff => staff.id == id);
+                if (staff) {
+                    staff.name = name;
+                    staff.position = position;
+                    showAlert('Staff member updated successfully!', 'success');
+                }
+            } else {
+                // Add new staff member
+                const newId = staffData.length ? Math.max(...staffData.map(staff => staff.id)) + 1 : 1;
+                staffData.push({ id: newId, name, position });
+                showAlert('New staff member added successfully!', 'success');
+            }
+
+            $('#staffModal').modal('hide');
+            loadTableData();
+        });
+
+        // Handle form submissions for subjects
+        document.getElementById('subject-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('subject-name').value;
+            const description = document.getElementById('subject-description').value;
+            const id = document.getElementById('subject-id').value;
+
+            if (id) {
+                // Edit existing subject
+                const subject = subjectsData.find(subject => subject.id == id);
+                if (subject) {
+                    subject.name = name;
+                    subject.description = description;
+                    showAlert('Subject updated successfully!', 'success');
+                }
+            } else {
+                // Add new subject
+                const newId = subjectsData.length ? Math.max(...subjectsData.map(subject => subject.id)) + 1 : 1;
+                subjectsData.push({ id: newId, name, description });
+                showAlert('New subject added successfully!', 'success');
+            }
+
+            $('#subjectModal').modal('hide');
+            loadTableData();
+        });
+
+        // Show alert messages
+        function showAlert(message, type) {
+            const alertsContainer = document.getElementById('alerts-container');
+            alertsContainer.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>`;
+        }
+
+        // Initial load
+        loadTableData();
+    </script>
+</body>
+</html>

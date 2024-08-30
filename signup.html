@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Scheduler Signup</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .signup-container {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        .card {
+            border-radius: 8px;
+            border: 1px solid #e1e1e1;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #004b49; /* Moodle-like dark green */
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid #003a39;
+            border-radius: 8px 8px 0 0;
+        }
+        .card-header .icon-container {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        .card-header .icon-container i {
+            color: #ffffff;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .btn-primary {
+            background-color: #004b49; /* Moodle-like dark green */
+            border-color: #003a39;
+        }
+        .btn-primary:hover {
+            background-color: #003a39; /* Darker green for hover effect */
+            border-color: #002828;
+        }
+        .form-check-label a {
+            color: #004b49;
+        }
+        .form-check-label a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-container">
+                    <i class="fas fa-university"></i> <!-- University Icon -->
+                </div>
+                <h5 class="card-title mb-0">University Scheduler Signup</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="terms" required>
+                        <label class="form-check-label" for="terms">I agree to the <a href="#">terms and conditions</a></label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

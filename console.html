@@ -1,0 +1,335 @@
+<!--
+@author [Alecia Sutherland]
+@email [example@mail.com]
+@create date 2024-08-03 12:31:30
+@modify date 2024-08-03 12:31:30
+@desc [Lecturer Console page]
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Console - TCSS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.2/main.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .btn-custom {
+            margin-right: 10px;
+        }
+        .form-control {
+            margin-bottom: 20px;
+        }
+        .editable {
+            background-color: #f9f9f9;
+        }
+        .table-editable td {
+            cursor: pointer;
+        }
+        .table-editable td:hover {
+            background-color: #e9ecef;
+        }
+        select {
+            width: 100%; /* Ensure dropdown takes full width of the container */
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">TCSS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Lecturer Console</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Alerts -->
+    <div id="alerts-container" class="container">
+        <!-- Alerts will be dynamically inserted here -->
+    </div>
+
+    <!-- Lecturer Console Section -->
+    <div class="container">
+        <h2>Lecturer Console</h2>
+        <ul class="nav nav-tabs" id="consoleTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="personal-info-tab" data-toggle="tab" href="#personal-info" role="tab" aria-controls="personal-info" aria-selected="true">Personal Info</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Schedule</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="classes-tab" data-toggle="tab" href="#classes" role="tab" aria-controls="classes" aria-selected="false">Assigned Classes</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="consoleTabsContent">
+            <!-- Personal Info Tab -->
+            <div class="tab-pane fade show active" id="personal-info" role="tabpanel" aria-labelledby="personal-info-tab">
+                <h3>Personal Information</h3>
+                <form id="personal-info-form">
+                    <div class="form-group">
+                        <label for="lecturer-select">Select Lecturer</label>
+                        <select id="lecturer-select" class="form-control">
+                            <!-- Lecturer names will be populated here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lecturer-name">Name</label>
+                        <input type="text" class="form-control editable" id="lecturer-name" placeholder="Enter name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lecturer-email">Email</label>
+                        <input type="email" class="form-control editable" id="lecturer-email" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lecture-load">Lecture Load</label>
+                        <input type="text" class="form-control editable" id="lecture-load" placeholder="Enter lecture load" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-select">Select Subject</label>
+                        <select id="subject-select" class="form-control">
+                            <!-- Subject names will be populated here -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+
+            <!-- Schedule Tab -->
+            <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+                <h3>Personal Schedule</h3>
+                <div id="calendar"></div>
+                <button id="export-schedule" class="btn btn-success btn-custom">Export Schedule to CSV</button>
+            </div>
+
+            <!-- Assigned Classes Tab -->
+            <div class="tab-pane fade" id="classes" role="tabpanel" aria-labelledby="classes-tab">
+                <h3>Assigned Classes</h3>
+                <div class="form-group">
+                    <button id="export-classes-csv" class="btn btn-success btn-custom">Export Assigned Classes to CSV</button>
+                </div>
+                <table class="table table-bordered table-editable">
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Room</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classes-table-body">
+                        <!-- Class rows will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- FullCalendar JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.2/main.min.js"></script>
+
+    <!-- JavaScript for functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const courses = [
+                { code: 'CSE1PGX', name: 'Programming Environments' },
+                { code: 'CSE1CFX', name: 'Cloud Foundations' },
+                { code: 'CSE1OFX', name: 'Object Oriented Programming Fundamentals' },
+                { code: 'CSE1ISX', name: 'Information Systems' },
+                { code: 'CSE2NFX', name: 'Network Engineering Fundamentals' },
+                { code: 'CSE2DCX', name: 'Database Fundamentals on the Cloud' },
+                { code: 'CSE1SPX', name: 'Sustainability Practices' },
+                { code: 'CSE1SIX', name: 'Information System Infrastructure' },
+                { code: 'CSE1IOX', name: 'Intermediate Object Oriented Programming' },
+                { code: 'CSE2ICX', name: 'Internet Client Engineering' },
+                { code: 'CSE2CNX', name: 'Computer Networks' },
+                { code: 'CSE2SDX', name: 'Information Systems Development' },
+                { code: 'BUS2PMX', name: 'Project Management' },
+                { code: 'CSE2VVX', name: 'Virtualisation for the Cloud' },
+                { code: 'MAT2DMX', name: 'Discrete Mathematics for Computer Science' },
+                { code: 'CSE2MAX', name: 'Mobile Application Development' },
+                { code: 'CSE2OSX', name: 'Operating Systems' },
+                { code: 'CSE2ADX', name: 'Application Development in the Cloud' },
+                { code: 'CSE2CPX', name: 'Managing Projects in the Cloud' },
+                { code: 'CSE2MLX', name: 'Machine Learning' },
+                { code: 'CSE2SAX', name: 'Operating Systems Administration' },
+                { code: 'CSE2ANX', name: 'Advanced Computer Networks' },
+                { code: 'CSE2WDX', name: 'Web Development' },
+                { code: 'CSE3BGX', name: 'Big Data Management on the Cloud (Elective)' },
+                { code: 'CSE3CIX', name: 'Computational Intelligence for Data Analysis (Elective)' },
+                { code: 'CSE3CSX', name: 'Cybersecurity Fundamentals (Elective)' },
+                { code: 'CSE3NWX', name: 'Networks, Systems and Web Security (Elective)' },
+                { code: 'CSE3OTX', name: 'Internet of Things (Elective)' },
+                { code: 'CSE3WSX', name: 'Wireless Network Engineering (Elective)' },
+                { code: 'CSE3PAX', name: 'Industry Project 3A' },
+                { code: 'CSE3PBX', name: 'Industry Project 3B' },
+                { code: 'CSE3PEX', name: 'Professional Environment' },
+                { code: 'CSE3ACX', name: 'Architecting on the Cloud' },
+                { code: 'CSE3SOX', name: 'System Operations on the Cloud' },
+                { code: 'CSE3BDX', name: 'Big Data on the Cloud' },
+                { code: 'CSE3PCX', name: 'Private Cloud Solutions' },
+                { code: 'CSE3CAX', name: 'Industry Project for Cloud Technology 3A' },
+                { code: 'CSE3CBX', name: 'Industry Project for Cloud Technology 3B' }
+            ];
+
+            const lecturers = [
+                'Acacia', 'Beech', 'Cypress', 'Douglas', 'Eucalypt', 'Flame', 'Guava', 'Hickory',
+                'Ironbark', 'Jacaranda', 'Karri', 'Laurel', 'Maple'
+            ];
+
+            // Populate lecturer dropdown
+            const lecturerSelect = document.getElementById('lecturer-select');
+            lecturers.forEach(lecturer => {
+                const option = document.createElement('option');
+                option.value = lecturer;
+                option.textContent = lecturer;
+                lecturerSelect.appendChild(option);
+            });
+
+            // Populate subject dropdown
+            const subjectSelect = document.getElementById('subject-select');
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.code;
+                option.textContent = `${course.code} - ${course.name}`;
+                subjectSelect.appendChild(option);
+            });
+
+            // Load personal info (dummy data for now)
+            function loadPersonalInfo() {
+                document.getElementById('lecturer-name').value = 'John Doe';
+                document.getElementById('lecturer-email').value = 'john.doe@example.com';
+                document.getElementById('lecture-load').value = 'Full-time';
+            }
+
+            // Load assigned classes (dummy data for now)
+            function loadAssignedClasses() {
+                const classesTableBody = document.getElementById('classes-table-body');
+                classesTableBody.innerHTML = ''; // Clear existing rows
+
+                // Sample data
+                const assignedClasses = [
+                    { code: 'CSE1PGX', name: 'Programming Environments', date: '2024-08-03', time: '09:00', room: 'A101' },
+                    { code: 'CSE1CFX', name: 'Cloud Foundations', date: '2024-08-04', time: '11:00', room: 'B202' }
+                ];
+
+                assignedClasses.forEach(cls => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <select class="form-control">
+                                ${courses.map(course => `<option value="${course.code}" ${course.code === cls.code ? 'selected' : ''}>${course.code} - ${course.name}</option>`).join('')}
+                            </select>
+                        </td>
+                        <td contenteditable="true" class="editable">${cls.name}</td>
+                        <td contenteditable="true" class="editable">${cls.date}</td>
+                        <td contenteditable="true" class="editable">${cls.time}</td>
+                        <td contenteditable="true" class="editable">${cls.room}</td>
+                    `;
+                    classesTableBody.appendChild(row);
+                });
+            }
+
+            // Initialize FullCalendar
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: [
+                    { title: 'Class A', start: '2024-08-03T09:00:00' },
+                    { title: 'Class B', start: '2024-08-04T11:00:00' }
+                ]
+            });
+            calendar.render();
+
+            loadPersonalInfo();
+            loadAssignedClasses();
+
+            // Export to CSV function for Assigned Classes
+            document.getElementById('export-classes-csv').addEventListener('click', function () {
+                const rows = [];
+                const table = document.querySelector('#classes-table-body').parentElement;
+                const headers = Array.from(table.querySelector('thead').querySelectorAll('th')).map(th => th.innerText);
+                rows.push(headers.join(','));
+
+                table.querySelectorAll('tbody tr').forEach(row => {
+                    const cells = Array.from(row.querySelectorAll('td')).map(td => {
+                        const select = td.querySelector('select');
+                        if (select) {
+                            return select.options[select.selectedIndex].innerText; // Extract selected option text
+                        }
+                        return td.innerText.trim(); // Ensure white spaces are trimmed
+                    });
+                    rows.push(cells.join(','));
+                });
+
+                const csvContent = 'data:text/csv;charset=utf-8,' + rows.join('\n');
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'assigned_classes.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Export to CSV function for Personal Schedule
+            document.getElementById('export-schedule').addEventListener('click', function () {
+                const rows = [];
+                const calendarEvents = calendar.getEvents();
+                const headers = ['Title', 'Start Date'];
+                rows.push(headers.join(','));
+
+                calendarEvents.forEach(event => {
+                    const cells = [event.title, event.start.toISOString()];
+                    rows.push(cells.join(','));
+                });
+
+                const csvContent = 'data:text/csv;charset=utf-8,' + rows.join('\n');
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'personal_schedule.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Save changes function (dummy implementation)
+            document.getElementById('personal-info-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                showAlert('success', 'Personal information updated successfully!');
+            });
+
+            function showAlert(type, message) {
+                const alertsContainer = document.getElementById('alerts-container');
+                alertsContainer.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>`;
+            }
+        });
+    </script>
+</body>
+</html>

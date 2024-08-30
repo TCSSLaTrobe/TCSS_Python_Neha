@@ -1,0 +1,241 @@
+<!--
+@author [Alecia Sutherland]
+@email [example@mail.com]
+@create date 2024-08-03 12:30:39
+@modify date 2024-08-03 12:30:39
+@desc [Part-time Lecturers]
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part-Time Lecturers - TCSS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .btn-custom {
+            margin-right: 10px;
+        }
+        .form-control {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">TCSS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#part-time-lecturers">Part-Time Lecturers</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Alerts -->
+    <div id="alerts-container" class="container">
+        <!-- Alerts will be dynamically inserted here -->
+    </div>
+
+    <!-- Part-Time Lecturers Section -->
+    <div id="part-time-lecturers" class="container">
+        <h2>Part-Time Lecturers</h2>
+        <div class="form-group">
+            <input type="text" class="form-control" id="search" placeholder="Search by name or department">
+        </div>
+        <button class="btn btn-primary btn-custom" data-toggle="modal" data-target="#lecturerModal">Add New Lecturer</button>
+        <button class="btn btn-success btn-custom" id="export-csv">Export to CSV</button>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="lecturer-table-body">
+                <!-- Lecturer rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Lecturer Modal -->
+    <div class="modal fade" id="lecturerModal" tabindex="-1" role="dialog" aria-labelledby="lecturerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lecturerModalLabel">Add/Edit Lecturer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="lecturer-form">
+                        <div class="form-group">
+                            <label for="lecturer-name">Name</label>
+                            <input type="text" class="form-control" id="lecturer-name" placeholder="Enter name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lecturer-department">Department</label>
+                            <input type="text" class="form-control" id="lecturer-department" placeholder="Enter department" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lecturer-email">Email</label>
+                            <input type="email" class="form-control" id="lecturer-email" placeholder="Enter email" required>
+                        </div>
+                        <input type="hidden" id="lecturer-id">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript for functionality -->
+    <script>
+        // Dummy data for part-time lecturers
+        const partTimeLecturersData = [
+            { id: 1, name: 'David Smith', department: 'Computer Science', email: 'david.smith@example.com' },
+            { id: 2, name: 'Emma Davis', department: 'Biology', email: 'emma.davis@example.com' }
+        ];
+
+        // Load table data
+        function loadTableData() {
+            const lecturerTableBody = document.getElementById('lecturer-table-body');
+            lecturerTableBody.innerHTML = '';
+            partTimeLecturersData.forEach(lecturer => {
+                lecturerTableBody.innerHTML += `
+                    <tr>
+                        <td>${lecturer.name}</td>
+                        <td>${lecturer.department}</td>
+                        <td>${lecturer.email}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="editLecturer(${lecturer.id})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteLecturer(${lecturer.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Function to delete lecturer
+        function deleteLecturer(id) {
+            const index = partTimeLecturersData.findIndex(lecturer => lecturer.id === id);
+            if (index !== -1) {
+                partTimeLecturersData.splice(index, 1);
+                showAlert('Lecturer deleted successfully!', 'success');
+                loadTableData();
+            }
+        }
+
+        // Function to edit lecturer
+        function editLecturer(id) {
+            const lecturer = partTimeLecturersData.find(lecturer => lecturer.id === id);
+            if (lecturer) {
+                document.getElementById('lecturer-name').value = lecturer.name;
+                document.getElementById('lecturer-department').value = lecturer.department;
+                document.getElementById('lecturer-email').value = lecturer.email;
+                document.getElementById('lecturer-id').value = lecturer.id;
+                $('#lecturerModal').modal('show');
+            }
+        }
+
+        // Handle form submission for lecturer
+        document.getElementById('lecturer-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('lecturer-name').value;
+            const department = document.getElementById('lecturer-department').value;
+            const email = document.getElementById('lecturer-email').value;
+            const id = document.getElementById('lecturer-id').value;
+
+            if (id) {
+                // Edit existing lecturer
+                const lecturer = partTimeLecturersData.find(lecturer => lecturer.id == id);
+                if (lecturer) {
+                    lecturer.name = name;
+                    lecturer.department = department;
+                    lecturer.email = email;
+                    showAlert('Lecturer updated successfully!', 'success');
+                }
+            } else {
+                // Add new lecturer
+                const newId = partTimeLecturersData.length ? Math.max(...partTimeLecturersData.map(lecturer => lecturer.id)) + 1 : 1;
+                partTimeLecturersData.push({ id: newId, name, department, email });
+                showAlert('New lecturer added successfully!', 'success');
+            }
+
+            $('#lecturerModal').modal('hide');
+            loadTableData();
+        });
+
+        // Handle search/filter
+        document.getElementById('search').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const filteredLecturers = partTimeLecturersData.filter(lecturer => 
+                lecturer.name.toLowerCase().includes(query) || 
+                lecturer.department.toLowerCase().includes(query) ||
+                lecturer.email.toLowerCase().includes(query)
+            );
+            const lecturerTableBody = document.getElementById('lecturer-table-body');
+            lecturerTableBody.innerHTML = '';
+            filteredLecturers.forEach(lecturer => {
+                lecturerTableBody.innerHTML += `
+                    <tr>
+                        <td>${lecturer.name}</td>
+                        <td>${lecturer.department}</td>
+                        <td>${lecturer.email}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="editLecturer(${lecturer.id})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteLecturer(${lecturer.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        // Show alert messages
+        function showAlert(message, type) {
+            const alertsContainer = document.getElementById('alerts-container');
+            alertsContainer.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>`;
+        }
+
+        // Export to CSV
+        document.getElementById('export-csv').addEventListener('click', function() {
+            let csvContent = "data:text/csv;charset=utf-8," 
+                + "Name,Department,Email\n"
+                + partTimeLecturersData.map(lecturer => `${lecturer.name},${lecturer.department},${lecturer.email}`).join("\n");
+
+            // Create a link and click it to download the CSV
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "part_time_lecturers_data.csv");
+            document.body.appendChild(link); // Required for FF
+            link.click();
+        });
+
+        // Initial load
+        loadTableData();
+    </script>
+</body>
+</html>
