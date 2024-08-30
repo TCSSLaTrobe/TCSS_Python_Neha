@@ -1,0 +1,422 @@
+<!--
+@author [Alecia Sutherland]
+@email [example@mail.com]
+@create date 2024-08-29 21:01:19
+@modify date 2024-08-29 21:01:19
+@desc [Manager1 html Interface module]
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCSS-University Managers Scheduling Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e9ecef;
+      color: #495057;
+    }
+    .navbar {
+      margin-bottom: 20px;
+    }
+    .container {
+      margin-top: 20px;
+      display: flex;
+    }
+    #calendar {
+      flex: 3;
+      margin-right: 20px;
+    }
+    #workloadSidebar {
+      flex: 1;
+      max-width: 300px;
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .modal-body input, .modal-body select {
+      margin-bottom: 10px;
+    }
+    .btn-custom {
+      margin-right: 5px;
+    }
+    .card-header {
+      background-color: #007bff;
+      color: #ffffff;
+      font-size: 1.2rem;
+    }
+    .card-body {
+      background-color: #ffffff;
+      padding: 15px;
+    }
+    .no-print {
+      margin-top: 20px;
+    }
+    @media print {
+      .no-print {
+        display: none;
+      }
+      #printable-area {
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+      }
+      .fc .fc-daygrid-day-number, .fc .fc-daygrid-day-top {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Manager Dashboard</a>
+  </nav>
+
+  <div class="container">
+    <!-- Calendar -->
+    <div id="calendar"></div>
+
+    <!-- Lecturer Workload Sidebar -->
+    <div id="workloadSidebar">
+      <div class="card">
+        <div class="card-header">
+          Lecturer Workloads
+        </div>
+        <div class="card-body" id="workloadList">
+          <!-- Workload details will be dynamically populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for adding/updating events -->
+  <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="scheduleModalLabel">Add/Edit Schedule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="scheduleForm">
+            <div class="mb-3">
+              <label for="title" class="form-label">Event Title</label>
+              <select id="title" class="form-select" required>
+                <option value="">Choose...</option>
+                <!-- Options for event titles dynamically added -->
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="start" class="form-label">Start Date & Time</label>
+              <input type="datetime-local" class="form-control" id="start" required>
+            </div>
+            <div class="mb-3">
+              <label for="end" class="form-label">End Date & Time</label>
+              <input type="datetime-local" class="form-control" id="end" required>
+            </div>
+            <div class="mb-3">
+              <label for="lecturer" class="form-label">Assigned Lecturer</label>
+              <select id="lecturer" class="form-select" required>
+                <option value="">Choose...</option>
+                <option>Acacia</option>
+                <option>Beech</option>
+                <option>Cypress</option>
+                <option>Douglas</option>
+                <option>Flame</option>
+                <option>Guava</option>
+                <option>Hickory</option>
+                <option>Ironbark</option>
+                <option>Jacaranda</option>
+                <option>Karri</option>
+                <option>Laurel</option>
+                <option>Maple</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="groups" class="form-label">Groups/Participants (comma-separated)</label>
+              <input type="text" class="form-control" id="groups" placeholder="Group A, Group B, ..." required>
+            </div>
+            <input type="hidden" id="eventId">
+            <button type="submit" class="btn btn-primary">Save Event</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export and Print Buttons -->
+  <div class="no-print">
+    <button type="button" id="printWorkload" class="btn btn-secondary btn-custom">Print Workload</button>
+    <button type="button" id="exportPDF" class="btn btn-success btn-custom">Export as PDF</button>
+    <button type="button" id="exportCSV" class="btn btn-primary btn-custom">Export as CSV</button>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js"></script>
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.6.0/jspdf.umd.min.js"></script>
+  <!-- jsPDF autoTable plugin for tables in PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.5.2/jspdf.plugin.autotable.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        editable: true,
+        selectable: true,
+        events: [
+          {
+            title: 'Information Technology Fundamentals',
+            start: '2024-07-14T10:00:00',
+            end: '2024-07-14T12:00:00',
+            extendedProps: {
+              lecturer: 'John Doe',
+              groups: ['Group A', 'Group B']
+            }
+          },
+          {
+            title: 'Programming Environments',
+            start: '2024-07-15T14:00:00',
+            end: '2024-07-15T16:00:00',
+            extendedProps: {
+              lecturer: 'Jane Smith',
+              groups: ['Group C']
+            }
+          }
+        ],
+        select: function(info) {
+          document.getElementById('start').value = info.startStr.slice(0,16);
+          document.getElementById('end').value = info.endStr.slice(0,16);
+          const modal = new bootstrap.Modal(document.getElementById('scheduleModal'));
+          document.getElementById('scheduleForm').reset();
+          document.getElementById('eventId').value = '';
+          modal.show();
+        },
+        eventClick: function(info) {
+          document.getElementById('title').value = info.event.title;
+          document.getElementById('start').value = info.event.start.toISOString().slice(0,16);
+          document.getElementById('end').value = info.event.end.toISOString().slice(0,16);
+          document.getElementById('lecturer').value = info.event.extendedProps.lecturer || '';
+          document.getElementById('groups').value = info.event.extendedProps.groups ? info.event.extendedProps.groups.join(', ') : '';
+          document.getElementById('eventId').value = info.event.id;
+          const modal = new bootstrap.Modal(document.getElementById('scheduleModal'));
+          modal.show();
+        }
+      });
+
+      calendar.render();
+
+      function populateEventTitles() {
+        const courses = [
+          "Information Technology Fundamentals",
+          "Programming Environments",
+          "Cloud Foundations",
+          "Object Oriented Programming Fundamentals",
+          "Information Systems",
+          "Network Engineering Fundamentals",
+          "Database Fundamentals on the Cloud",
+          "Sustainability Practices",
+          "Information System Infrastructure",
+          "Intermediate Object Oriented Programming",
+          "Internet Client Engineering",
+          "Computer Networks",
+          "Information Systems Development",
+          "Project Management",
+          "Virtualisation for the Cloud",
+          "Discrete Mathematics for Computer Science",
+          "Mobile Application Development",
+          "Operating Systems",
+          "Application Development in the Cloud",
+          "Managing Projects in the Cloud",
+          "Machine Learning",
+          "Operating Systems Administration",
+          "Advanced Computer Networks",
+          "Web Development",
+          "Big Data Management on the Cloud (Elective)",
+          "Computational Intelligence for Data Analysis (Elective)",
+          "Cybersecurity Fundamentals (Elective)",
+          "Networks, Systems and Web Security (Elective)",
+          "Internet of Things (Elective)",
+          "Wireless Network Engineering (Elective)",
+          "Industry Project 3A",
+          "Industry Project 3B",
+          "Professional Environment",
+          "Architecting on the Cloud",
+          "System Operations on the Cloud",
+          "Big Data on the Cloud",
+          "Private Cloud Solutions",
+          "Industry Project for Cloud Technology 3A",
+          "Industry Project for Cloud Technology 3B",
+          "Advanced Database Management Systems",
+          "Ethics and Law in IT"
+        ];
+
+        const select = document.getElementById('title');
+        courses.forEach(course => {
+          const option = document.createElement('option');
+          option.value = course;
+          option.textContent = course;
+          select.appendChild(option);
+        });
+      }
+
+      populateEventTitles();
+
+      document.getElementById('scheduleForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const title = document.getElementById('title').value;
+        const start = document.getElementById('start').value;
+        const end = document.getElementById('end').value;
+        const lecturer = document.getElementById('lecturer').value;
+        const groups = document.getElementById('groups').value.split(',').map(item => item.trim());
+
+        if (title && start && end && lecturer && groups.length > 0) {
+          const eventId = document.getElementById('eventId').value;
+          if (eventId) {
+            // Update existing event
+            const event = calendar.getEventById(eventId);
+            event.setProp('title', title);
+            event.setStart(start);
+            event.setEnd(end);
+            event.setExtendedProp('lecturer', lecturer);
+            event.setExtendedProp('groups', groups);
+          } else {
+            // Add new event
+            calendar.addEvent({
+              id: new Date().toISOString(),
+              title: title,
+              start: start,
+              end: end,
+              extendedProps: {
+                lecturer: lecturer,
+                groups: groups
+              }
+            });
+          }
+          updateWorkloadSidebar();
+          const modal = bootstrap.Modal.getInstance(document.getElementById('scheduleModal'));
+          modal.hide();
+        } else {
+          alert('Please fill in all fields.');
+        }
+      });
+
+      function updateWorkloadSidebar() {
+        const events = calendar.getEvents();
+        const workloadList = document.getElementById('workloadList');
+        workloadList.innerHTML = ''; // Clear existing workload list
+
+        const lecturers = {};
+
+        events.forEach(event => {
+          const lecturer = event.extendedProps.lecturer;
+          const groups = event.extendedProps.groups.join(', ');
+
+          if (!lecturers[lecturer]) {
+            lecturers[lecturer] = [];
+          }
+
+          lecturers[lecturer].push({
+            title: event.title,
+            start: event.start.toLocaleString(),
+            end: event.end.toLocaleString(),
+            groups: groups
+          });
+        });
+
+        for (const [lecturer, schedules] of Object.entries(lecturers)) {
+          const lecturerDiv = document.createElement('div');
+          lecturerDiv.innerHTML = `<h5>${lecturer}</h5><ul>`;
+          schedules.forEach(schedule => {
+            lecturerDiv.innerHTML += `<li><strong>${schedule.title}</strong>: ${schedule.start} - ${schedule.end} (Groups: ${schedule.groups})</li>`;
+          });
+          lecturerDiv.innerHTML += `</ul>`;
+          workloadList.appendChild(lecturerDiv);
+        }
+      }
+
+      document.getElementById('printWorkload').addEventListener('click', function() {
+        const printWindow = window.open('', '', 'height=800,width=1200');
+        const workloadHTML = document.getElementById('workloadSidebar').innerHTML;
+
+        printWindow.document.write('<html><head><title>Print Workloads</title>');
+        printWindow.document.write('<style>body { font-family: Arial, sans-serif; } ul { list-style-type: none; padding: 0; } li { margin-bottom: 10px; }</style>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write('<h1>Lecturer Workloads</h1>');
+        printWindow.document.write('<div>' + workloadHTML + '</div>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+      });
+
+      document.getElementById('exportPDF').addEventListener('click', function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const events = calendar.getEvents();
+        const rows = [['Title', 'Start', 'End', 'Lecturer', 'Groups']];
+
+        events.forEach(event => {
+          const groups = event.extendedProps.groups.join(', ');
+          rows.push([
+            event.title,
+            event.start.toISOString(),
+            event.end.toISOString(),
+            event.extendedProps.lecturer,
+            groups
+          ]);
+        });
+
+        doc.text('Schedule Export', 10, 10);
+        doc.autoTable({
+          startY: 20,
+          head: [rows[0]],
+          body: rows.slice(1)
+        });
+
+        doc.save('schedule.pdf');
+      });
+
+      document.getElementById('exportCSV').addEventListener('click', function() {
+        const events = calendar.getEvents();
+        let csvContent = "data:text/csv;charset=utf-8,Title,Start,End,Lecturer,Groups\n";
+
+        events.forEach(event => {
+          const groups = event.extendedProps.groups.join(', ');
+          const title = event.title.replace(/"/g, '""'); // Escape quotes
+          const lecturer = event.extendedProps.lecturer.replace(/"/g, '""'); // Escape quotes
+          const row = [
+            `"${title}"`,
+            `"${event.start.toISOString()}"`,
+            `"${event.end.toISOString()}"`,
+            `"${lecturer}"`,
+            `"${groups}"`
+          ].join(',');
+          csvContent += row + "\n";
+        });
+
+        // Create a downloadable link and trigger the download
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "schedule.csv");
+        document.body.appendChild(link); // Required for Firefox
+        link.click();
+        document.body.removeChild(link); // Remove the link after download
+      });
+    });
+  </script>
+</body>
+</html>
