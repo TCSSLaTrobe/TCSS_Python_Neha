@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Lecturer</title>
+    <!-- Link to Bootstrap CSS for styling -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Add New Lecturer</h2>
+        <form action="/addlecturer_subject" method="POST">
+            <div class="form-group">
+                <label for="lecturerName">Lecturer Name</label>
+                <select class="form-control" id="lecturerName" name="lecturerName">
+                    <option value="Acacia">Acacia</option>
+                    <option value="Beech">Beech</option>
+                    <option value="Cypress">Cypress</option>
+                    <option value="Douglas">Douglas</option>
+                    <option value="Flame">Flame</option>
+                    <option value="Guava">Guava</option>
+                    <option value="Hickory">Hickory</option>
+                    <option value="Ironbark">Ironbark</option>
+                    <option value="Jacaranda">Jacaranda</option>
+                    <option value="Karri">Karri</option>
+                    <option value="Laurel">Laurel</option>
+                    <option value="Maple">Maple</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="subjectPrefix">Subject Prefix</label>
+                <select class="form-control" id="subjectPrefix" name="subjectPrefix">
+    <option value="CSE1ITX">CSE1ITX-Information Technology Fundamentals</option>
+    <option value="CSE1PGX">CSE1PGX-Programming Environments</option>
+    <option value="CSE1CFX">CSE1CFX-Cloud Foundations</option>
+    <option value="CSE1OFX">CSE1OFX-Object Oriented Programming Fundamentals</option>
+    <option value="CSE1ISX">CSE1ISX-Information Systems</option>
+    <option value="CSE2NFX">CSE2NFX-Network Engineering Fundamentals</option>
+    <option value="CSE2DCX">CSE2DCX-Database Fundamentals on the Cloud</option>
+    <option value="CSE1SPX">CSE1SPX-Sustainability Practices</option>
+    <option value="CSE1SIX">CSE1SIX-Information System Infrastructure</option>
+    <option value="CSE1IOX">CSE1IOX-Intermediate Object Oriented Programming</option>
+    <option value="CSE2CNX">CSE2CNX-Computer Networks</option>
+    <option value="CSE2SDX">CSE2SDX-Information Systems Development</option>
+    <option value="BUS2PMX">BUS2PMX-Project Management</option>
+    <option value="CSE2VVX">CSE2VVX-Virtualisation for the Cloud</option>
+    <option value="MAT2DMX">MAT2DMX-Discrete Mathematics for Computer Science</option>
+    <option value="CSE2MAX">CSE2MAX-Mobile Application Development</option>
+    <option value="CSE2OSX">CSE2OSX-Operating Systems</option>
+    <option value="CSE2ADX">CSE2ADX-Application Development in the Cloud</option>
+    <option value="CSE2CPX">CSE2CPX-Managing Projects in the Cloud</option>
+    <option value="CSE2MLX">CSE2MLX-Machine Learning</option>
+    <option value="CSE2SAX">CSE2SAX-Operating Systems Administration</option>
+    <option value="CSE2ANX">CSE2ANX-Advanced Computer Networks</option>
+    <option value="CSE2WDX">CSE2WDX-Web Development</option>
+    <option value="CSE3BGX">CSE3BGX-Big Data Management on the Cloud (Elective)</option>
+    <option value="CSE3CIX">CSE3CIX-Computational Intelligence for Data Analysis (Elective)</option>
+    <option value="CSE3CSX">CSE3CSX-Cybersecurity Fundamentals (Elective)</option>
+    <option value="CSE3NWX">CSE3NWX-Networks, Systems and Web Security (Elective)</option>
+    <option value="CSE3OTX">CSE3OTX-Internet of Things (Elective)</option>
+    <option value="CSE3WSX">CSE3WSX-Wireless Network Engineering (Elective)</option>
+    <option value="CSE3PAX">CSE3PAX-Industry Project 3A</option>
+    <option value="CSE3PBX">CSE3PBX-Industry Project 3B</option>
+    <option value="CSE3PEX">CSE3PEX-Professional Environment</option>
+    <option value="CSE3ACX">CSE3ACX-Architecting on the Cloud</option>
+    <option value="CSE3SOX">CSE3SOX-System Operations on the Cloud</option>
+    <option value="CSE3BDX">CSE3BDX-Big Data on the Cloud</option>
+    <option value="CSE3PCX">CSE3PCX-Private Cloud Solutions</option>
+    <option value="CSE3CAX">CSE3CAX-Industry Project for Cloud Technology 3A</option>
+    <option value="CSE3CBX">CSE3CBX-Industry Project for Cloud Technology 3B</option>
+</select>
+
+            </div>
+            <div class="form-group">
+                <label for="lecturerLoad">Lecturer Load</label>
+                <input type="number" class="form-control" id="lecturerLoad" name="lecturerLoad" placeholder="Enter lecturer load">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Lecturer</button>
+        </form>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Manager</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Add New Manager</h2>
+    <form method="POST" action="/add_manager">
+        <div class="form-group">
+            <label for="managerName">Manager Name</label>
+            <input type="text" class="form-control" id="managerName" name="managerName" required>
+        </div>
+        <div class="form-group">
+            <label for="designation">Designation</label>
+            <input type="text" class="form-control" id="designation" name="designation" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Manager</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

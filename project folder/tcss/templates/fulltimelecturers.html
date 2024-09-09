@@ -1,0 +1,105 @@
+<!--
+@author [Alecia Sutherland]
+@email [example@mail.com]
+@create date 2024-08-03 12:30:32
+@modify date 2024-08-03 12:30:32
+@desc [Full-time lecturers]
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Lecturers - TCSS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">TCSS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#lecturers">Full-Time Lecturers</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Full-Time Lecturers Section -->
+    <div id="lecturers" class="container">
+        <h2>Manage Lecturers</h2>
+        <div class="form-group">
+            <input type="text" class="form-control" id="search" placeholder="Search by name or department">
+        </div>
+        <button class="btn btn-primary btn-custom" data-toggle="modal" data-target="#lecturerModal">Add New Lecturer</button>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Subject Expertise</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="lecturer-table-body">
+            {% for lecturer in lecturer_data %}
+                <tr>
+                    <td>{{ lecturer.id }}</td>
+                    <td>{{ lecturer.name }}</td>
+                    <td>{% for subject in lecturer.expertise %}
+                        {{ subject }} <br>
+                        {% endfor %}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm">Edit</button>
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Lecturer Modal -->
+    <div class="modal fade" id="lecturerModal" tabindex="-1" role="dialog" aria-labelledby="lecturerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lecturerModalLabel">Add/Edit Lecturer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="lecturer-form">
+                        <div class="form-group">
+                            <label for="lecturer-name">Name</label>
+                            <input type="text" class="form-control" id="lecturer-name" placeholder="Enter name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lecturer-expertise">Subject Expertise</label>
+                            <select id="lecturer-expertise" multiple="multiple" required>
+                                <option value="subject 1">Subject 1</option>
+                                <option value="subject 2">Subject 2</option>
+                            </select>
+                        </div>
+                        <input type="hidden" id="lecturer-id">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
