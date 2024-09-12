@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="StyleSheet.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <ul>
+            <li><a href="admin_manage_subjects.html">Manage Subjects</a></li>
+            <li><a href="admin_manage_lecturers.html">Manage Lecturers</a></li>
+            <li><a href="admin_manage_users.html">Manage Users</a></li>
+            <li><a href="admin_settings.html">System Settings</a></li> 
+        </ul>
+    </div>
+    <div class="content"> 
+        <h1>Welcome, Admin</h1>
+        <div class="dashboard-panels">
+            <div class="panel">
+                <h3>Manage Subjects</h3>
+                <p>Add, edit, or delete subjects.</p>
+                <button onclick="location.href='admin_manage_subjects.html'">Go to Subjects</button>
+            </div>
+            <div class="panel">
+                <h3>Manage Lecturers</h3>
+                <p>Assign or reassign lecturers.</p>
+                <button onclick="location.href='admin_manage_lecturers.html'">Go to Lecturers</button>
+            </div>
+            <div class="panel">
+                <h3>System Reports</h3>
+                <p>Generate various reports.</p>
+                <button onclick="location.href='admin_reports.html'">Go to Reports</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
