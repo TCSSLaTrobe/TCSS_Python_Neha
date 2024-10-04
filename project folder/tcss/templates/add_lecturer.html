@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Lecturer</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Add New Lecturer</h2>
+    <form method="POST" action="/add_lecturer">
+        <div class="form-group">
+            <label for="lecturer_name">Name</label>
+            <input type="text" class="form-control" id="lecturer_name" name="lecturer_name"  style="width: 25%;"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="lecturer_workload">Workload</label>
+            <input type="number" min="0" max="1" step=".1" class="form-control" id="lecturer_workload"
+                   name="lecturer_workload" placeholder="1.0" style="width: 10%;" required>
+            <small id="workloadHelp" class="text-muted">
+            Must be between 0.1 and 1.0 (full-time)
+            </small>
+        </div>
+            <label>Subject Expertise</label>
+            <div class="row">
+                <div class="col">
+                {% for subject in subjects[0] %}
+                    <div class="form-check" style="margin-bottom: 5px;">
+                        <input class="form-check-input" type="checkbox" value="{{ loop.index }}" name="sme">
+                        <label class="form-check-label">
+                            {{ subjects[0][loop.index -1][0] + " - " + subjects[0][loop.index -1][1] }}</label>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="col">
+                {% for subject in subjects[1] %}
+                    <div class="form-check" style="margin-bottom: 5px;">
+                        <input class="form-check-input" type="checkbox" value="{{ loop.index + subjects[1] | length}}"
+                               name="sme">
+                        <label class="form-check-label">
+                            {{ subjects[1][loop.index-1][0] + " - " + subjects[1][loop.index-1][1] }}</label>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+</body>
+</html>

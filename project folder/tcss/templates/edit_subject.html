@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Subject</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Edit Subject</h2>
+    <form method="POST" action="/update_subject">
+        <div class="form-group">
+            <label for="subject_code">Code</label>
+            <input type="text"  class="form-control" id="subject_code" name="subject_code" value="{{ subject.code }}"
+                   placeholder="{{ subject.code }}" style="width: 10%;" required>
+        </div>
+        <div class="form-group">
+            <label for="subject_name">Name</label>
+            <input type="text" class="form-control" id="subject_name" name="subject_name" value="{{ subject.name }}"
+                   placeholder="{{ subject.name }}" style="width: 40%;" required>
+        </div>
+        <div  class="form-group">
+            <label>Instances: {{ subject.instances }}</label>
+        </div>
+            <input type="hidden" name="subject_id" value="{{ subject.id }}"/>
+            <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+</body>
+</html>

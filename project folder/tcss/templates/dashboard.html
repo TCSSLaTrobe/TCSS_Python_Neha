@@ -71,15 +71,7 @@
                 Dashboard
               </a>
             </li>
-            {% if account_level <= 3 %}
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="lecturer console"></span>
-               Lecturer Console
-              </a>
-            </li>
-            {% endif%}
-            {% if account_level <= 2 %}
+            {% if account_level <= 1 %}
             <li class="nav-item">
               <a class="nav-link" href="/view_lecturers">
                 <span data-feather="fulltime lecturers"></span>
@@ -87,26 +79,28 @@
               </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="Manager"></span>
-                  Manager
-                </a>
-            </li>
-            {% endif%}
-            {% if account_level <= 1 %}
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="Admin"></span>
-                Admin
+              <a class="nav-link" href="/view_subjects">
+                <span data-feather="manage subjects"></span>
+                Manage Subjects
               </a>
             </li>
+            {% endif %}
+            {% if account_level <= 2 %}
             <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="Staff"></span>
-                Staff
+              <a class="nav-link" href="/manage_schedule">
+                <span data-feather="manage schedule"></span>
+                Manage Schedule
               </a>
             </li>
-            {% endif%}
+            {% endif %}
+            {% if account_level <= 3 %}
+            <li class="nav-item">
+              <a class="nav-link" href="/view_schedule">
+                <span data-feather="view schedule"></span>
+                View Schedule
+              </a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </nav>

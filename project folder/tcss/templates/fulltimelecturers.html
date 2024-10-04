@@ -18,7 +18,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">TCSS</a>
+        <a class="navbar-brand" href="/dashboard">TCSS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -34,10 +34,12 @@
     <!-- Full-Time Lecturers Section -->
     <div id="lecturers" class="container">
         <h2>Manage Lecturers</h2>
-        <div class="form-group">
-            <input type="text" class="form-control" id="search" placeholder="Search by name or department">
-        </div>
-        <button class="btn btn-primary btn-custom" data-toggle="modal" data-target="#lecturerModal">Add New Lecturer</button>
+<!--        <div class="form-group">-->
+<!--            <input type="text" class="form-control" id="search" placeholder="Search by name or department">-->
+<!--        </div>-->
+        <form action="/add_lecturer">
+            <button type="submit" class="btn btn-primary btn-custom">Add New Lecturer</button>
+        </form>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -56,8 +58,14 @@
                         {{ subject }} <br>
                         {% endfor %}</td>
                     <td>
-                        <button class="btn btn-info btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                        <form method="POST" action="/edit_lecturer">
+                            <input type="hidden" name="lecturer_id" value="{{ lecturer.id }}"/>
+                            <button type="submit"  class="btn btn-info btn-sm">Edit</button>
+                        </form>
+                        <form method="POST" action="/delete_lecturer">
+                            <input type="hidden" name="lecturer_id" value="{{ lecturer.id }}"/>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}

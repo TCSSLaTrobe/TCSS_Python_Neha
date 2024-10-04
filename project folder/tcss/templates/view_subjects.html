@@ -1,0 +1,80 @@
+<!--
+@author [Alecia Sutherland]
+@email [example@mail.com]
+@create date 2024-08-03 12:30:32
+@modify date 2024-08-03 12:30:32
+@desc [Full-time lecturers]
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Subjects - TCSS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/dashboard">TCSS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link">Manage Subjects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Subjects List -->
+    <div id="lecturers" class="container">
+        <h2>Manage Subjects</h2>
+<!--        <div class="form-group">-->
+<!--            <input type="text" class="form-control" id="search" placeholder="Search by name or department">-->
+<!--        </div>-->
+        <form action="/add_subject">
+            <button type="submit" class="btn btn-primary btn-custom">Add New Subject</button>
+        </form>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Code</th>
+                    <th>Subject Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="subject-table-body">
+            {% for subject in subjects %}
+                <tr>
+                    <td>{{ subject.id }}</td>
+                    <td>{{ subject.code }}</td>
+                    <td>{{ subject.name }}</td>
+                    <td>
+                        <form method="POST" action="/edit_subject">
+                            <input type="hidden" name="subject_id" value="{{ subject.id }}"/>
+                            <button type="submit"  class="btn btn-info btn-sm">Edit</button>
+                        </form>
+                        <form method="POST" action="/delete_subject">
+                            <input type="hidden" name="subject_id" value="{{ subject.id }}"/>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

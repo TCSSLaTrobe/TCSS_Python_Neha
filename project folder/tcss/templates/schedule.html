@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Schedule</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>My Schedule - {{ lecturer_name }}</h2>
+    {% for instance in schedule %}
+    <div>
+        <b>
+        {{ instance.code }} - {{ instance.name }}
+        </b>
+        <div>
+            Start Date: {{ instance.start_date }}
+        </div>
+        <div>
+            Student Count: {{ instance.student_count }}
+        </div>
+        <div>
+            Assisting Lecturer: {{ instance.assistant }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</body>
+</html>

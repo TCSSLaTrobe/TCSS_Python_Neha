@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Lecturer</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Delete Lecturer</h2>
+    <form method="POST" action="/confirm_delete_lecturer">
+        <div class="form-group">
+            <label for="lecturer_name">Name</label>
+            <input readonly type="text" class="form-control" id="lecturer_name" name="lecturer_name"
+                   value="{{ lecturer.name }}" placeholder="{{ lecturer.name }}" style="width: 25%;" required>
+        </div>
+        <div class="form-group">
+            <label>Are you sure? This action cannot be undone</label>
+            <input type="hidden" name="lecturer_id" value="{{ lecturer.id }}"/>
+         </div>
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>
+</body>
+</html>
